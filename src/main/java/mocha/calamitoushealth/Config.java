@@ -47,8 +47,8 @@ public class Config {
     }
 
     private static boolean parseBool(String json, String key, boolean def) {
-        // regex: "KEY"\s*:\s*([0-9]+(?:\.[0-9]+)?)
-        Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*([0-9]+(?:\\.[0-9]+)?)", Pattern.CASE_INSENSITIVE);
+        // regex: "KEY"\s*:\s*(true|false)
+        Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*(true|false)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(json);
         if (m.find()) {
             try {
