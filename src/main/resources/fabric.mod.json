@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "calamitous-health",
+	"version": "${version}",
+	"name": "Calamitous Health",
+	"description": "A lightweight health overhaul inspired by Terraria and Calamity.\n\n- Removes hunger-based regen in favor of time-scaled natural regeneration.\n- Adds temporary Armor penalites (affected by Armor Toughness) on Normal+ for taking damage, discouraging you from tanking hits.",
+	"authors": [
+		"ItsMochaTheOtter"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/calamitous-health/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mocha.calamitoushealth.CalamitousHealth"
+		],
+		"client": [
+			"mocha.calamitoushealth.CalamitousHealthClient"
+		],
+		"fabric-datagen": [
+			"mocha.calamitoushealth.CalamitousHealthDataGenerator"
+		]
+	},
+	"mixins": [
+		"calamitous-health.mixins.json",
+		{
+			"config": "calamitous-health.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.18.1",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
