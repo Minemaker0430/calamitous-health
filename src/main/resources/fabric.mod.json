@@ -3,13 +3,13 @@
 	"id": "calamitous-health",
 	"version": "${version}",
 	"name": "Calamitous Health",
-	"description": "A lightweight health overhaul inspired by Terraria and Calamity.\n\n- Removes hunger-based regen in favor of time-scaled natural regeneration.\n- Adds temporary Armor penalites (affected by Armor Toughness) on Normal+ for taking damage, discouraging you from tanking hits.",
+	"description": "A lightweight health overhaul inspired by Terraria and Calamity.\n\nFeatures:\n- Removes hunger-based regen in favor of time-scaled natural regeneration.\n- Adds temporary Armor penalties (affected by Armor Toughness) on Normal+ for taking damage, discouraging you from tanking hits.",
 	"authors": [
 		"ItsMochaTheOtter"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Minemaker0430/calamitous-health/",
+		"issues": "https://github.com/Minemaker0430/calamitous-health/issues"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/calamitous-health/icon.png",
