@@ -12,7 +12,6 @@ import java.util.UUID;
 public class ArmorPenaltyManager {
     private static final Map<PlayerEntity, Float> PENALTIES = new WeakHashMap<>();
     private static final Map<PlayerEntity, Integer> REGEN_TICKS = new WeakHashMap<>();
-    private static final Map<PlayerEntity, Double> BASE_ARMOR = new WeakHashMap<>();
 
     private static final UUID MODIFIER_UUID_BASE = UUID.fromString("2b4d6f2a-7f6a-4d9a-9b6f-9c3a8b3d6f1a");
 
@@ -24,18 +23,21 @@ public class ArmorPenaltyManager {
             return;
         }
 
-        /*double baseArmor = BASE_ARMOR.getOrDefault(player, -1.d);
-        if (baseArmor < 0.d) { // get base armor when no penalty is present 
-            // (won't work 100% consistently like if you switch armor pieces, but this works for now)
-            baseArmor = player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).getValue();
-        }*/
+        EntityAttributeInstance inst = player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+        if (inst == null) return;
 
-        // compute new penalty
+        // compute new penalty and clamp so armor won't go below 0
         float current = PENALTIES.getOrDefault(player, 0f);
         float updated = current + amount;
+        try {
+            double currentEffective = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
+            float allowed = (float) currentEffective + current; // armor without our modifier
+            if (allowed < 0f) allowed = 0f;
+            if (updated > allowed) updated = allowed;
+        } catch (Throwable t) {}
+
         PENALTIES.put(player, updated);
         REGEN_TICKS.put(player, 0);
-        //BASE_ARMOR.put(player, baseArmor);
 
         applyModifier(player, updated);
     }
@@ -87,14 +89,22 @@ public class ArmorPenaltyManager {
         try {
             EntityAttributeInstance inst = player.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
             if (inst == null) return;
+            if (penalty <= 0f) return;
 
             UUID modUuid = UUID.nameUUIDFromBytes((MODIFIER_UUID_BASE.toString() + player.getUuidAsString()).getBytes());
             // remove existing
             if (inst.getModifier(modUuid) != null) inst.removeModifier(modUuid);
-            if (inst.getValue() <= 0f) return;
-            if (penalty <= 0f) return;
+
+            // clamp modifier so effective armor does not go below zero
+            double currentEffective = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
+            float previous = PENALTIES.getOrDefault(player, 0f);
+            float allowed = (float) currentEffective + previous;
+            if (allowed < 0f) allowed = 0f;
+            float toApply = Math.min(penalty, allowed);
+            if (toApply <= 0f) return;
+
             // subtract penalty from armor by applying negative modifier
-            inst.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(modUuid, "calamity_armor_penalty", -penalty, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION));
+            inst.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(modUuid, "calamity_armor_penalty", -toApply, net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION));
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -106,8 +116,6 @@ public class ArmorPenaltyManager {
             if (inst == null) return;
             UUID modUuid = UUID.nameUUIDFromBytes((MODIFIER_UUID_BASE.toString() + player.getUuidAsString()).getBytes());
             if (inst.getModifier(modUuid) != null) inst.removeModifier(modUuid);
-
-            BASE_ARMOR.remove(player);
         } catch (Throwable t) {
             t.printStackTrace();
         }

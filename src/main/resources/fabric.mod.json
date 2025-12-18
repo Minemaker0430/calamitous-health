@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "calamitous-health",
-	"version": "${version}",
+	"version": "1.0.1",
 	"name": "Calamitous Health",
 	"description": "A lightweight health overhaul inspired by Terraria and Calamity.\n\nFeatures:\n- Removes hunger-based regen in favor of time-scaled natural regeneration.\n- Adds temporary Armor penalties (affected by Armor Toughness) on Normal+ for taking damage, discouraging you from tanking hits.",
 	"authors": [
