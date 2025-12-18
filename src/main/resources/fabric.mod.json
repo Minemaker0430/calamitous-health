@@ -11,7 +11,7 @@
 		"sources": "https://github.com/Minemaker0430/calamitous-health/",
 		"issues": "https://github.com/Minemaker0430/calamitous-health/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/calamitous-health/icon.png",
 	"environment": "*",
 	"entrypoints": {
